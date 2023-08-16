@@ -27,7 +27,7 @@ function Home({navigation}: HomeProps) {
           <SearchBar />
           <AddProducts />
           <ProductList />
-          {/* <Products /> */}
+          <Products />
         </ScrollView>
       </View>
     </SafeAreaView>

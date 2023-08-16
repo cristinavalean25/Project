@@ -6,7 +6,6 @@ import {RootStackParamList} from '../types/RootStackParamList';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useSelector} from 'react-redux/es/hooks/useSelector';
 
 type UserProfileRouteProp = RouteProp<RootStackParamList, 'UserProfile'>;
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import Product from './Product';
 import {ProductProps} from '../types/ProductProps';
 
