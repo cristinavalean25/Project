@@ -19,11 +19,12 @@ const ProductList = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
           <View>
+            <Text>ID: {item.id}</Text>
             <Text>Title: {item.title}</Text>
             <Text>Price: {item.price}</Text>
             <Text>Description: {item.description}</Text>
             <Image
-              source={{uri: products.imageUri}}
+              source={{uri: item.imageUri}}
               style={{width: 100, height: 100}}
             />
             <Button

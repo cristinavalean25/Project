@@ -58,7 +58,7 @@ const AddProducts = () => {
   };
 
   const [productData, setProductData] = useState<Product>({
-    id: '',
+    id: 0,
     title: '',
     price: 0,
     category: '',
@@ -66,15 +66,15 @@ const AddProducts = () => {
     image: [],
   });
 
-  const handleAddProduct = () => {
-    dispatch(
-      addProduct({
-        ...productData,
-        image: selectedImages,
-      }),
-    );
+  const handleAddProduct = async () => {
+    const newProduct = {
+      ...productData,
+      image: selectedImages,
+    };
+
+    dispatch(addProduct(newProduct));
     setProductData({
-      id: '',
+      id: 0,
       title: '',
       price: 0,
       category: '',
@@ -92,6 +92,13 @@ const AddProducts = () => {
   return (
     <View>
       <Text>Add Product</Text>
+      <TextInput
+        placeholder="Product ID"
+        value={productData.id.toString()}
+        onChangeText={text =>
+          setProductData({...productData, id: parseInt(text, 10)})
+        }
+      />
       <TextInput
         placeholder="Product Title"
         value={productData.title}

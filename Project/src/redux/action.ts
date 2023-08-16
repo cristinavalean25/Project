@@ -17,16 +17,26 @@ export const addProduct = (product: Product) => {
   };
 };
 
+export interface AddProductAction {
+  type: typeof ADD_PRODUCT;
+  payload: Product;
+}
+
 /////////////////////////////////
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 
-export const deleteProduct = (productId: number) => {
-  return {
-    type: DELETE_PRODUCT,
-    payload: productId,
-  };
-};
+export interface DeleteProductAction {
+  type: typeof DELETE_PRODUCT;
+  payload: number;
+}
+
+export type ProductActionTypes = AddProductAction | DeleteProductAction;
+
+export const deleteProduct = (productId: number): DeleteProductAction => ({
+  type: DELETE_PRODUCT,
+  payload: productId,
+});
 
 //////////////////////////////////
 
