@@ -13,7 +13,6 @@ import {RootStackParamList} from '../types/RootStackParamList';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
-import {authenticate} from '../redux/AuthSlice';
 
 type RegisterProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
@@ -24,7 +23,6 @@ function Register({navigation}: RegisterProps) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
-  const dispatch = useDispatch();
 
   const handleRegister = async () => {
     try {
@@ -34,6 +32,13 @@ function Register({navigation}: RegisterProps) {
         setPasswordError(
           'Password must contain min 8 characters, one uppercase letter, one digit, and one special character.',
         );
+        return;
+      }
+
+      const emailRegex =
+        /^[a-z][a-z0-9_]*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+      if (!email.match(emailRegex)) {
+        setPasswordError('Email is not valid.');
         return;
       }
 

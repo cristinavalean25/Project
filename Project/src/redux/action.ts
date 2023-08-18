@@ -31,7 +31,11 @@ export interface DeleteProductAction {
   payload: number;
 }
 
-export type ProductActionTypes = AddProductAction | DeleteProductAction;
+// export type ProductActionTypes = AddProductAction | DeleteProductAction;
+export type ProductActionTypes =
+  | AddProductAction
+  | DeleteProductAction
+  | {type: typeof ADD_IMAGES; payload: {productId: number; images: string[]}};
 
 export const deleteProduct = (productId: number): DeleteProductAction => ({
   type: DELETE_PRODUCT,
@@ -42,7 +46,7 @@ export const deleteProduct = (productId: number): DeleteProductAction => ({
 
 export const ADD_IMAGES = 'ADD_IMAGES';
 
-export const addImages = (imageUrls: string[]) => ({
+export const addImages = (productId: number, imageUrls: string[]) => ({
   type: ADD_IMAGES,
-  payload: imageUrls,
+  payload: {productId, images: imageUrls},
 });

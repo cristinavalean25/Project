@@ -1,5 +1,10 @@
 import {Product} from '../types/Product';
-import {ADD_PRODUCT, DELETE_PRODUCT, ProductActionTypes} from './action';
+import {
+  ADD_IMAGES,
+  ADD_PRODUCT,
+  DELETE_PRODUCT,
+  ProductActionTypes,
+} from './action';
 
 interface ProductState {
   products: Product[];
@@ -14,6 +19,7 @@ const productReducer = (state = initialState, action: ProductActionTypes) => {
     case ADD_PRODUCT:
       const newProduct = action.payload as unknown as Product;
       newProduct.id = state.products.length + 1;
+      newProduct.image = [];
       return {
         ...state,
         products: [...state.products, newProduct],
@@ -29,6 +35,19 @@ const productReducer = (state = initialState, action: ProductActionTypes) => {
       return {
         ...state,
         products: reorderedProducts,
+      };
+    case ADD_IMAGES:
+      return {
+        ...state,
+        products: state.products.map(product => {
+          if (product.id === action.payload.productId) {
+            return {
+              ...product,
+              image: [...product.image, ...action.payload.images],
+            };
+          }
+          return product;
+        }),
       };
     default:
       return state;
