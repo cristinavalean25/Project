@@ -23,10 +23,15 @@ const ProductList = () => {
             <Text>Title: {item.title}</Text>
             <Text>Price: {item.price}</Text>
             <Text>Description: {item.description}</Text>
-            <Image
-              source={{uri: item.imageUri}}
-              style={{width: 100, height: 100}}
-            />
+            {item.image.map(
+              (imageUrl: any, index: React.Key | null | undefined) => (
+                <Image
+                  key={index}
+                  source={{uri: imageUrl}}
+                  style={{width: 100, height: 100}}
+                />
+              ),
+            )}
             <Button
               title="Delete"
               onPress={() => handleDeleteProduct(item.id)}

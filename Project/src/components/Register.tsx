@@ -12,7 +12,6 @@ import Navbar from './Navbar';
 import {RootStackParamList} from '../types/RootStackParamList';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
 
 type RegisterProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;

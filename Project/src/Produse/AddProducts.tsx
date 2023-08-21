@@ -1,79 +1,14 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  Image,
-  PermissionsAndroid,
-} from 'react-native';
+import {View, Text, TextInput, Button, Image} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {Product} from '../types/Product';
+import {ImagePickerResponse, Product} from '../types/Product';
 import {addProduct} from '../redux/action';
-import ImagePicker, {
-  ImageLibraryOptions,
-  ImagePickerResponse,
-} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import {PermissionsAndroid} from 'react-native';
 
 const AddProducts = () => {
   const dispatch = useDispatch();
-
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
-
-  const requestStoragePermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'App needs access to your storage.',
-          buttonPositive: 'OK',
-        },
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    } catch (error) {
-      console.error('Error requesting storage permission:', error);
-      return false;
-    }
-  };
-
-  const handleImagePicker = async () => {
-    const permissionGranted = await requestStoragePermission();
-
-    if (permissionGranted) {
-      try {
-        const options: ImageLibraryOptions = {
-          mediaType: 'photo',
-        };
-
-        ImagePicker.launchImageLibrary(
-          options,
-          (response: ImagePickerResponse) => {
-            if (!response.didCancel) {
-              if (response.assets && response.assets.length > 0) {
-                const selectedPaths = response.assets
-                  .map(image => image.uri)
-                  .filter(path => path !== undefined) as string[];
-                setSelectedImages(prevSelectedImages => [
-                  ...prevSelectedImages,
-                  ...selectedPaths,
-                ]);
-              } else {
-                console.log('No images selected.');
-              }
-            } else {
-              console.log('Image selection canceled.');
-            }
-          },
-        );
-      } catch (error) {
-        console.error('Error selecting images: ', error);
-      }
-    } else {
-      console.log('Storage permission denied');
-    }
-  };
-
+  let [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [productData, setProductData] = useState<Product>({
     id: 0,
     title: '',
@@ -83,13 +18,44 @@ const AddProducts = () => {
     image: [],
   });
 
-  const handleAddProduct = async () => {
+  const handleImagePicker = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: 'Permission to access gallery',
+          message: 'App needs access to your gallery to select images.',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const response: ImagePickerResponse = await ImagePicker.openPicker({
+          mediaType: 'photo',
+          multiple: true,
+          maxFiles: 10,
+        });
+
+        if (response && response.assets) {
+          const imageUris = response.assets.map(asset => asset.uri);
+          setSelectedImages([...selectedImages, ...imageUris]);
+        }
+      } else {
+        console.log('Permission denied');
+      }
+    } catch (error) {
+      console.log('Image picker error: ', error);
+    }
+  };
+
+  const handleAddProduct = () => {
     const newProduct: Product = {
       ...productData,
       image: selectedImages,
     };
 
     dispatch(addProduct(newProduct));
+    setSelectedImages([]);
     setProductData({
       id: 0,
       title: '',
@@ -98,7 +64,6 @@ const AddProducts = () => {
       description: '',
       image: [],
     });
-    setSelectedImages([]);
   };
 
   return (
